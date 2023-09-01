@@ -33,6 +33,18 @@ class EjemploController extends AbstractController
         }
     }
 
+    #[Route('/ejemplo2', methods:['GET'])]
+    public function metodo_get2(): Response
+    {
+        $response = new Response(json_encode(array(
+            'estado'=>'ok',
+            'mensaje'=>'mensaje desde get'
+        )));
+
+        $response->headers->set('Tamila','tamila.es');
+        return $response;
+    }
+
     // https://127.0.0.1:8000/ejemplo-query-string/elefante?id=1
     #[Route('/ejemplo-query-string/{animal}', methods:['GET'])]
     public function metodo_get_query_string(Request $request, string $animal): JsonResponse
