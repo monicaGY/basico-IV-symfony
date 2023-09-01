@@ -41,11 +41,14 @@ class EjemploController extends AbstractController
     }
 
     #[Route('/ejemplo', methods:['POST'])]
-    public function metodo_post(): JsonResponse
+    public function metodo_post(Request $request): JsonResponse
     {
+
+        $data = json_decode($request->getContent(), true);
         return $this->json([
             'estado' => 'ok',
             'mensaje' => 'método post',
+            'correo' => $data["correo"]
         ], 200);
     }
 
