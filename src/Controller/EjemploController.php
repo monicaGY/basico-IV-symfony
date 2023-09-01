@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class EjemploController extends AbstractController
 {
     
-    #[Route('/ejemplo', methods:['GET'], name: 'app_ejemplo')]
+    #[Route('/ejemplo', methods:['GET'])]
     public function metodo_get(): JsonResponse
     {
         return $this->json([
@@ -18,7 +18,16 @@ class EjemploController extends AbstractController
         ], 200);
     }
 
-    #[Route('/ejemplo', methods:['POST'], name: 'app_ejemplo')]
+    #[Route('/ejemplo/{id}', methods:['GET'])]
+    public function metodo_get_id(int $id): JsonResponse
+    {
+        return $this->json([
+            'estado' => 'ok',
+            'mensaje' => 'método get | id = '.$id,
+        ], 200);
+    }
+
+    #[Route('/ejemplo', methods:['POST'])]
     public function metodo_post(): JsonResponse
     {
         return $this->json([
@@ -27,8 +36,8 @@ class EjemploController extends AbstractController
         ], 200);
     }
 
-    #[Route('/ejemplo', methods:['PUT'], name: 'app_ejemplo')]
-    public function metodo_put(): JsonResponse
+    #[Route('/ejemplo/{id}', methods:['PUT'])]
+    public function metodo_put(int $id): JsonResponse
     {
         return $this->json([
             'estado' => 'ok',
@@ -36,8 +45,8 @@ class EjemploController extends AbstractController
         ]);
     }
 
-    #[Route('/ejemplo', methods:['DELETE'], name: 'app_ejemplo')]
-    public function metodo_delete(): JsonResponse
+    #[Route('/ejemplo/{id}', methods:['DELETE'])]
+    public function metodo_delete(int $id): JsonResponse
     {
         return $this->json([
             'estado' => 'ok',
