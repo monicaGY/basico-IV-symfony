@@ -13,12 +13,24 @@ class EjemploController extends AbstractController
 {
     
     #[Route('/ejemplo', methods:['GET'])]
-    public function metodo_get(): JsonResponse
+    public function metodo_get(Request $request): JsonResponse
     {
-        return $this->json([
-            'estado' => 'ok',
-            'mensaje' => 'método get',
-        ], 200);
+
+        if($request->headers->get("x-token")){
+
+            return $this->json([
+                'estado' => 'ok',
+                'mensaje' => 'método get',
+                "mi header" => $request->headers->get("x-token")
+            ], 200);
+            
+        }else{
+            return $this->json([
+                'estado' => 'ok',
+                'mensaje' => 'método get',
+            ], 200);
+
+        }
     }
 
     // https://127.0.0.1:8000/ejemplo-query-string/elefante?id=1
