@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 use App\Entity\Categoria;
+use App\Entity\Producto;
 
 class DoctrineCategoriaController extends AbstractController
 {
@@ -98,5 +99,41 @@ class DoctrineCategoriaController extends AbstractController
             'estado'=>'ok',
             'mensaje'=>'Categoría modificada con éxito'
         ], 201);
+    }
+
+
+    #[Route('/api/v1/doctrine/categoria/{id}', methods:['DELETE'])]
+    public function eliminar_categoria(int $id ,Request $request,SluggerInterface $slugger): JsonResponse
+    {
+
+        $categoria = $this->em->getRepository(Categoria::class)->find($id);
+
+        if(empty($categoria)){
+            return $this->json([
+                'estado'=>'error',
+                'mensaje'=>'categoría no encontrada'
+            ]);
+        }
+
+
+        $producto = $this->em->getRepository(Producto::class)->findBy(array('categoria'=>$id));
+
+        if($producto){
+            return $this->json([
+                'estado'=>'error',
+                'mensaje'=>'no se puede eliminar esta categoria'
+            ]);
+        }else{
+
+            $this->em->remove($categoria);
+            $this->em->flush();
+            return $this->json([
+                'estado'=>'okey',
+                'mensaje'=>'categoría eliminada'
+            ]);
+        }
+
+        
+
     }
 }
