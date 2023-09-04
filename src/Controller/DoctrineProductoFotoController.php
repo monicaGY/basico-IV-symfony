@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use App\Entity\ProductoFoto;
 
 class DoctrineProductoFotoController extends AbstractController
@@ -33,5 +34,26 @@ class DoctrineProductoFotoController extends AbstractController
             ];
         }
         return $this->json($productos_array);
+    }
+
+    #[Route('/doctrine/producto/foto-descargar/{id}', methods:['GET'])]
+    public function descargar_foto_productos (int $id): BinaryFileResponse
+    {
+        $datos = $this->em->getRepository(ProductoFoto::class)->findOneBy(['id'=>$id]);
+
+        if(empty($datos)){
+            return $this->json([
+                'estado'=>'error',
+                'mensaje'=>'foto-producto no encontrado'
+            ]);
+        }
+
+        
+
+        //te indica el directorio donde estas posicionado
+        $ruta = getcwd();
+        return $this->file("{$ruta}/uploads/fotos/{$datos->getFoto()}");
+
+        
     }
 }
