@@ -68,5 +68,35 @@ class DoctrineCategoriaController extends AbstractController
         ], 201);
     }
 
-    
+    #[Route('/api/v1/doctrine/categoria/{id}', methods:['PUT'])]
+    public function modificar_categoria(int $id ,Request $request,SluggerInterface $slugger): JsonResponse
+    {
+
+        $datos =json_decode($request->getContent(),true);
+
+        if(empty($datos)){
+            return $this->json([
+                'estado'=>'error',
+                'mensaje'=>'parámetros vacíos'
+            ]);
+        }
+
+        $categoria = $this->em->getRepository(Categoria::class)->find($id);
+
+        if(empty($categoria)){
+            return $this->json([
+                'estado'=>'error',
+                'mensaje'=>'categoría no encontrada'
+            ]);
+        }
+
+
+        $categoria->setNombre($datos['nombre']);
+        $categoria->setSlug($slugger->slug(strtolower($datos['nombre'])));
+        $this->em->flush();
+        return $this->json([
+            'estado'=>'ok',
+            'mensaje'=>'Categoría modificada con éxito'
+        ], 201);
+    }
 }
